@@ -1,15 +1,7 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
 
-
-// -- They give us an ARRAY called 'questions' What could we do with this (?) -- //
-const questions = [
-    "What is the title?", 
-];
-
-// -- They give us a writeToFile() FUNCTION, Looks like we may need to read/write to a file. What BUILT-IN node module will help us out with this (?) -- // 
-function writeToFile(fileName, data) {
-}
+// const queryUrl = `https://api.github.com/users/${response.username}`;
 
 // -- This is a fairly common programming construct. They are just giving us a FUNCTION to INITIALIZE or SETUP our project parameter. It's also where we usually kick off our project flow -- //
 function init() {
@@ -40,38 +32,63 @@ inquirer.prompt([
         message: "What is your project's name?",
         name: "title"
     },
-    // {
-    //     type: "input",
-    //     message: "Please write a short description of your project:",
-    //     name: "description"
-    // },
-    // {
-    //     type: "list",
-    //     message: "What kind of license should your project have?",
-    //     choices: ["MIT", "Apache", "GPL", "Public Domain (Unlicense)"],
-    //     name: "email"
-    // },
-    // {
-    //     type: "input",
-    //     message: "What command should be run to install dependencies?",
-    //     name: "dependencies"
-    // },
-    // {
-    //     type: "input",
-    //     message: "What command should be run to run tests?",
-    //     name: "tests"
-    // },
-    // {
-    //     type: "input",
-    //     message: "What does the user need to know about using the repo?",
-    //     name: "repoUse"
-    // },
-    // {
-    //     type: "input",
-    //     message: "What does the user need to know about contributing to the repo?",
-    //     name: "repoContribution"
-    // }
+    {
+        type: "input",
+        message: "Please write a short description of your project:",
+        name: "description"
+    },
+    {
+        type: "list",
+        message: "What kind of license should your project have?",
+        choices: ["MIT", "Apache", "GPL", "Public Domain (Unlicense)"],
+        name: "license"
+    },
+    {
+        type: "input",
+        message: "What command should be run to install dependencies?",
+        name: "install"
+    },
+    {
+        type: "input",
+        message: "What command should be run to run tests?",
+        name: "tests"
+    },
+    {
+        type: "input",
+        message: "What does the user need to know about using the repo?",
+        name: "useage"
+    },
+    {
+        type: "input",
+        message: "What does the user need to know about contributing to the repo?",
+        name: "contribution"
+    }
 ]).then(res => {
 
+    let title = `# Title \n ${res.title} \n \n`;
+    fs.writeFileSync("readme.md", title, err => {
+        if(err) throw err;
+        
+    });
+
+    addSection("Description", res.description);
+    addSection("Installation", res.install);
+    addSection("Usage", res.useage);
+    addSection("License", res.license);
+    addSection("Contributing", res.contribution);
+    addSection("Tests", res.tests);
+    
+    
 
 });
+
+
+
+
+
+function addSection(header, info){
+    let infoStr = `## ${header} \n ${info} \n \n`;
+    fs.appendFileSync("readme.md", infoStr, err => {
+        if(err) throw err;
+    })
+}
