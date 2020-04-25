@@ -66,15 +66,15 @@ inquirer.prompt([
     }
 ]).then(res => {
     //Adding badge information
-    const badge = `![GitHub followers](https://img.shields.io/github/followers/${res.username}?style=social) \n`;
+    // const badge = `![GitHub followers](https://img.shields.io/github/followers/${res.username}?style=social) \n`;
 
-    fs.writeFileSync("readme.md", badge, err => {
-        if(err) throw err;
-    });
+    // fs.writeFileSync("readme.md", badge, err => {
+    //     if(err) throw err;
+    // });
 
     //Adding the title
     let title = `# Title \n ${res.title} \n \n`;
-    fs.appendFileSync("readme.md", title, err => {
+    fs.writeFileSync("readme.md", title, err => {
         if(err) throw err;  
     });
 
@@ -89,6 +89,7 @@ inquirer.prompt([
     \n * [License](#license)
     \n * [Contributing](#contributing)
     \n * [Tests](#tests)
+    \n * [Questions](#questions)
     \n `;
 
     fs.appendFileSync("readme.md", toc, err => {
@@ -105,10 +106,14 @@ inquirer.prompt([
     
     const queryUrl = `https://api.github.com/users/${res.username}`;
     axios.get(queryUrl).then(({data}) => {
-        console.log(data);
-
-        let profilePic = `![alt text](${data.avatar_url} "Profile Pic")`;
-        fs.appendFileSync("readme.md", profilePic, err => {
+        let questionsSection = `GitHub Username: ${res.username}
+        \n Email: ${res.email}
+        \n Project URL: ${res.projectUrl}
+        \n ![GitHub followers](https://img.shields.io/github/followers/${res.username}?style=social)
+        \n ![alt text](${data.avatar_url} "Profile Pic")
+        `;
+        
+        fs.appendFileSync("readme.md", questionsSection, err => {
             if(err) throw err;
         });
     });

@@ -1,4 +1,3 @@
-![GitHub followers](https://img.shields.io/github/followers/koutron?style=social) 
 # Title 
  t 
  
@@ -20,6 +19,8 @@
     
  * [Tests](#tests)
     
+ * [Questions](#questions)
+    
  ## Installation 
  t 
  
@@ -38,4 +39,13 @@
 ## Questions 
   
  
-![alt text](https://avatars0.githubusercontent.com/u/24259448?v=4 "Profile Pic")
+GitHub Username: koutron
+        
+ Email: t
+        
+ Project URL: t
+        
+ ![GitHub followers](https://img.shields.io/github/followers/koutron?style=social)
+        
+ ![alt text](https://avatars0.githubusercontent.com/u/24259448?v=4 "Profile Pic")
+        
