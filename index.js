@@ -2,16 +2,6 @@ const inquirer = require("inquirer");
 const axios = require("axios");
 const fs = require("fs");
 
-
-
-// -- This is a fairly common programming construct. They are just giving us a FUNCTION to INITIALIZE or SETUP our project parameter. It's also where we usually kick off our project flow -- //
-function init() {
-
-}
-
-// -- We DEFINED our INITALIZATION FUNCTION above, here we are just kicking off (running) our program. -- // 
-init();
-
 inquirer.prompt([
     {
         type: "input",
@@ -65,15 +55,11 @@ inquirer.prompt([
         name: "contribution"
     }
 ]).then(res => {
-    //Adding badge information
-    // const badge = `![GitHub followers](https://img.shields.io/github/followers/${res.username}?style=social) \n`;
-
-    // fs.writeFileSync("readme.md", badge, err => {
-    //     if(err) throw err;
-    // });
-
     //Adding the title
     let title = `# Title \n ${res.title} \n \n`;
+    //Due to the asynchronous behavior of the writeFile and appendFile methods, sections were rendering out of the order in 
+    //which they were coded in.  To solve this, I used the writeFileSync and appendFileSync methods which preserve the order
+    //in which the functions are fired. 
     fs.writeFileSync("readme.md", title, err => {
         if(err) throw err;  
     });
@@ -82,8 +68,8 @@ inquirer.prompt([
     addSection("Description", res.description);
 
     //Adding Table of Contents
-    addSection("Table of Contents", "");
-    let toc = `* [Description](#description)
+    let toc = `## Table of Contents
+    \n * [Description](#description)
     \n * [Installation](#installation)
     \n * [Usage](#usage)
     \n * [License](#license)
@@ -102,11 +88,11 @@ inquirer.prompt([
     addSection("License", res.license);
     addSection("Contributing", res.contribution);
     addSection("Tests", res.tests);
-    addSection("Questions", "");
     
     const queryUrl = `https://api.github.com/users/${res.username}`;
     axios.get(queryUrl).then(({data}) => {
-        let questionsSection = `GitHub Username: ${res.username}
+        let questionsSection = `## Questions
+        \n GitHub Username: ${res.username}
         \n Email: ${res.email}
         \n Project URL: ${res.projectUrl}
         \n ![GitHub followers](https://img.shields.io/github/followers/${res.username}?style=social)
@@ -119,10 +105,6 @@ inquirer.prompt([
     });
 
 });
-
-
-
-
 
 function addSection(header, info){
     let infoStr = `## ${header} \n ${info} \n \n`;
