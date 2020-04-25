@@ -1,7 +1,8 @@
 const inquirer = require("inquirer");
+const axios = require("axios");
 const fs = require("fs");
 
-// const queryUrl = `https://api.github.com/users/${response.username}`;
+
 
 // -- This is a fairly common programming construct. They are just giving us a FUNCTION to INITIALIZE or SETUP our project parameter. It's also where we usually kick off our project flow -- //
 function init() {
@@ -17,16 +18,16 @@ inquirer.prompt([
         message: "What is your GitHub username?",
         name: "username"
     },
-    // {
-    //     type: "input",
-    //     message: "What is your email?",
-    //     name: "email"
-    // },
-    // {
-    //     type: "input",
-    //     message: "What is the URL to your project?",
-    //     name: "projectUrl"
-    // },
+    {
+        type: "input",
+        message: "What is your email?",
+        name: "email"
+    },
+    {
+        type: "input",
+        message: "What is the URL to your project?",
+        name: "projectUrl"
+    },
     {
         type: "input",
         message: "What is your project's name?",
@@ -66,6 +67,7 @@ inquirer.prompt([
 ]).then(res => {
     //Adding badge information
     const badge = `![GitHub followers](https://img.shields.io/github/followers/${res.username}?style=social) \n`;
+
     fs.writeFileSync("readme.md", badge, err => {
         if(err) throw err;
     });
@@ -80,9 +82,18 @@ inquirer.prompt([
     addSection("Description", res.description);
 
     //Adding Table of Contents
-    let toc = `## Table of Contents
-    
-    `
+    addSection("Table of Contents", "");
+    let toc = `* [Description](#description)
+    \n * [Installation](#installation)
+    \n * [Usage](#usage)
+    \n * [License](#license)
+    \n * [Contributing](#contributing)
+    \n * [Tests](#tests)
+    \n `;
+
+    fs.appendFileSync("readme.md", toc, err => {
+        if(err) throw err;
+    });
 
     //Adding other relevant sections
     addSection("Installation", res.install);
@@ -90,8 +101,17 @@ inquirer.prompt([
     addSection("License", res.license);
     addSection("Contributing", res.contribution);
     addSection("Tests", res.tests);
+    addSection("Questions", "");
     
-    
+    const queryUrl = `https://api.github.com/users/${res.username}`;
+    axios.get(queryUrl).then(({data}) => {
+        console.log(data);
+
+        let profilePic = `![alt text](${data.avatar_url} "Profile Pic")`;
+        fs.appendFileSync("readme.md", profilePic, err => {
+            if(err) throw err;
+        });
+    });
 
 });
 
